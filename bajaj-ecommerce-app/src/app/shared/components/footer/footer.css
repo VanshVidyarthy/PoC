@@ -1,0 +1,64 @@
+/* Footer overall layout */
+.site-footer {
+	background: #131a22;
+	color: #ddd;
+	font-size: 14px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-backtotop {
+	background: #37475a;
+}
+
+.back-top-link {
+	color: #fff;
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.back-top-link:hover { text-decoration: underline; }
+
+.footer-heading {
+	color: #fff;
+	font-size: 13px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: .5px;
+	margin-bottom: .75rem;
+}
+
+.footer-list li + li { margin-top: .4rem; }
+
+.footer-link {
+	color: #ddd;
+	text-decoration: none;
+	font-size: 13px;
+	display: inline-block;
+	position: relative;
+	padding: 2px 0;
+}
+
+.footer-link:hover { color: #fff; text-decoration: underline; }
+
+.footer-divider { border: 0; height: 1px; background: #2d3942; }
+
+.footer-secondary { background: #0f161e; }
+
+.footer-brand { color: #fff; font-size: 15px; }
+
+.footer-meta .meta-link {
+	color: #b8c0c7;
+	font-size: 12px;
+	text-decoration: none;
+	padding: 2px 6px;
+}
+
+.footer-meta .meta-link:hover { color: #fff; text-decoration: underline; }
+
+.footer-legal { background: #0f161e; }
+
+@media (max-width: 767.98px) {
+	.footer-sections .row > div { min-height: 0; }
+}

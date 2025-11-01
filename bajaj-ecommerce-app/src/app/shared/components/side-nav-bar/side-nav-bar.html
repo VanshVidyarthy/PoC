@@ -1,0 +1,230 @@
+<!-- Hamburger Menu Button - Mobile/Tablet Only -->
+<button class="btn btn-outline-primary position-fixed d-lg-none" 
+        type="button" 
+        data-bs-toggle="offcanvas" 
+        data-bs-target="#sideNavbar" 
+        aria-controls="sideNavbar"
+  style="top: 10px; left: 10px; z-index: 2000;">
+  <span style="font-size: 1.5rem; line-height: 1;">☰</span>
+</button>
+
+<!-- Sidebar Offcanvas -->
+<div class="offcanvas offcanvas-start" 
+     tabindex="-1" 
+     id="sideNavbar" 
+     aria-labelledby="sideNavbarLabel"
+     data-bs-backdrop="true"
+     data-bs-keyboard="true">
+  
+  <!-- Sidebar Header -->
+  <div class="offcanvas-header bg-primary text-white">
+    <h5 class="offcanvas-title" id="sideNavbarLabel">
+      <span style="margin-right: 2rem;">👤</span>
+      Bajaj E-Commerce
+    </h5>
+    <button type="button" 
+            class="btn-close btn-close-white" 
+            data-bs-dismiss="offcanvas" 
+            aria-label="Close"></button>
+  </div>
+  @if (userSummary) {
+    <div class="px-4 py-3 bg-light border-bottom small">
+      <div class="d-flex align-items-center">
+        <span class="badge bg-secondary me-2" style="min-width:48px">{{ (userSummary.name || 'User') | slice:0:1 | uppercase }}</span>
+        <div>
+          <div><strong>{{ userSummary.name || 'User' }}</strong></div>
+          <small class="text-muted">Role: {{ userSummary.role || 'N/A' }}</small>
+        </div>
+      </div>
+    </div>
+  }
+  
+  <!-- Sidebar Body -->
+  <div class="offcanvas-body p-0">
+    <nav class="nav flex-column">
+      
+      <!-- Home -->
+      <a class="nav-link d-flex align-items-center py-3 px-4 border-bottom" 
+         href="#home"
+         [class.active]="currentView === 'home'"
+         (click)="onNavigate('home', $event)">
+        <span style="margin-right: 1rem; width: 1.2em;">🏠</span>
+        <span>Home</span>
+      </a>
+      
+
+
+      <!-- Login (only when logged out) -->
+
+
+      <!-- Signup (only when logged out) -->
+      @if (!isLoggedIn()) {
+        <a class="nav-link d-flex align-items-center py-3 px-4 border-bottom" 
+           href="#signup"
+           [class.active]="currentView === 'signup'"
+           (click)="onNavigate('signup', $event)">
+          <span style="margin-right: 1rem; width: 1.2em;">📝</span>
+          <span>Sign Up</span>
+        </a>
+      }
+
+    <!-- Categories -->
+      <a class="nav-link d-flex align-items-center py-3 px-4 border-bottom" 
+         href="#categories"
+         [class.active]="currentView === 'categories'"
+         (click)="onNavigate('categories', $event)">
+        <span style="margin-right: 1rem; width: 1.2em;">🎞️</span>
+        <span>Categories</span>
+      </a>
+
+      
+      <!-- Cart -->
+      <a class="nav-link d-flex align-items-center py-3 px-4 border-bottom position-relative" 
+         href="#cart"
+         [class.active]="currentView === 'cart'"
+         (click)="onNavigate('cart', $event)">
+        <span style="margin-right: 1rem; width: 1.2em;">🛒</span>
+        <span>Cart</span>
+  @if (cartCount() > 0) { <span class="badge bg-danger ms-2">{{ cartCount() }}</span> }
+      </a>
+      
+
+      
+      <!-- Settings (admin only) -->
+      @if (isAdmin()) {
+        <a class="nav-link d-flex align-items-center py-3 px-4 border-bottom" href="#settings" (click)="onNavigate('settings', $event)">
+          <span style="margin-right: 1rem; width: 1.2em;">⚙️</span>
+          <span>Settings</span>
+        </a>
+      }
+      
+      <!-- Logout (only when logged in) -->
+      @if (isLoggedIn()) {
+        <a class="nav-link d-flex align-items-center py-3 px-4 text-danger" href="#logout" (click)="logout($event)">
+          <span style="margin-right: 1rem; width: 1.2em;">🚪</span>
+          <span>Logout</span>
+        </a>
+      }
+      
+    </nav>
+  </div>
+  
+  <!-- Sidebar Footer -->
+  <div class="offcanvas-footer p-3 bg-light border-top">
+    <small class="text-muted">
+      <span style="margin-right: 0.25rem;">ℹ️</span>
+      Version 1.0.0
+    </small>
+  </div>
+  
+</div>
+
+<!-- Fixed Desktop Sidebar -->
+<div class="d-none d-lg-block">
+  <div class="position-fixed top-0 start-0 h-100 bg-white shadow-sm" style="width: 250px; z-index: 1040;">
+    <!-- Sidebar Header -->
+    <div class="sidebar-header bg-primary text-white p-3">
+      <h5 class="mb-0">
+        <span style="margin-right: 0.5rem;">👤</span>
+        Bajaj E-Commerce
+      </h5>
+    </div>
+    @if (userSummary) {
+      <div class="px-4 py-3 bg-light border-bottom small">
+        <div class="d-flex align-items-center">
+          <span class="badge bg-secondary me-2" style="min-width:48px">{{ (userSummary.name || 'User') | slice:0:1 | uppercase }}</span>
+          <div>
+            <div><strong>{{ userSummary.name || 'User' }}</strong></div>
+            <small class="text-muted">Role: {{ userSummary.role || 'N/A' }}</small>
+          </div>
+        </div>
+      </div>
+    }
+    
+    <!-- Sidebar Body -->
+    <div class="p-0">
+      <nav class="nav flex-column">
+        
+        <!-- Home -->
+        <a class="nav-link d-flex align-items-center py-3 px-4 border-bottom" 
+           href="#home"
+           [class.active]="currentView === 'home'"
+           (click)="onNavigate('home', $event)">
+          <span style="margin-right: 1rem; width: 1.2em;">🏠</span>
+          <span>Home</span>
+        </a>
+        
+    
+        
+        <!-- Login (only when logged out) -->
+        @if (!isLoggedIn()) {
+          <a class="nav-link d-flex align-items-center py-3 px-4 border-bottom" 
+             href="#login"
+             [class.active]="currentView === 'login'"
+             (click)="onNavigate('login', $event)">
+            <span style="margin-right: 1rem; width: 1.2em;">🔐</span>
+            <span>Login</span>
+          </a>
+        }
+
+        <!-- Signup (only when logged out) -->
+        @if (!isLoggedIn()) {
+          <a class="nav-link d-flex align-items-center py-3 px-4 border-bottom" 
+             href="#signup"
+             [class.active]="currentView === 'signup'"
+             (click)="onNavigate('signup', $event)">
+            <span style="margin-right: 1rem; width: 1.2em;">📝</span>
+            <span>Sign Up</span>
+          </a>
+        }
+        
+        <!-- Categories -->
+        <a class="nav-link d-flex align-items-center py-3 px-4 border-bottom" 
+           href="#categories"
+           [class.active]="currentView === 'categories'"
+           (click)="onNavigate('categories', $event)">
+          <span style="margin-right: 1rem; width: 1.2em;">🎞️</span>
+          <span>Categories</span>
+        </a>
+
+
+        
+        <!-- Cart -->
+        <a class="nav-link d-flex align-items-center py-3 px-4 border-bottom position-relative" 
+           href="#cart"
+           [class.active]="currentView === 'cart'"
+           (click)="onNavigate('cart', $event)">
+          <span style="margin-right: 1rem; width: 1.2em;">🛒</span>
+          <span>Cart</span>
+          @if (cartCount() > 0) { <span class="badge bg-danger ms-2">{{ cartCount() }}</span> }
+        </a>
+
+        
+        <!-- Settings (admin only) -->
+        @if (isAdmin()) {
+          <a class="nav-link d-flex align-items-center py-3 px-4 border-bottom" href="#settings" (click)="onNavigate('settings', $event)">
+            <span style="margin-right: 1rem; width: 1.2em;">⚙️</span>
+            <span>Settings</span>
+          </a>
+        }
+        
+        <!-- Logout (only when logged in) -->
+        @if (isLoggedIn()) {
+          <a class="nav-link d-flex align-items-center py-3 px-4 text-danger" href="#logout" (click)="logout($event)">
+            <span style="margin-right: 1rem; width: 1.2em;">🚪</span>
+            <span>Logout</span>
+          </a>
+        }
+        
+      </nav>
+    </div>
+    
+    <!-- Sidebar Footer -->
+    <div class="position-absolute bottom-0 w-100 p-3 bg-light border-top">
+      <small class="text-muted">
+        <span style="margin-right: 0.25rem;">ℹ️</span>
+        Version 1.0.0
+      </small>
+    </div>
+  </div>
+</div>

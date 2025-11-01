@@ -1,0 +1,78 @@
+@if(events && events.length>0 ){
+<h1>{{title}}</h1>
+<hr>
+<h6>{{subtitle}}</h6>
+@if (childMessage) {
+<p>{{childMessage}}</p>
+}
+ 
+<div class="row g-3 align-items-center">
+    <div class="col-auto">
+        <label for="inputSearch" class="col-form-label">Search Event</label>
+    </div>
+    <div class="col-auto">
+        <input type="search" id="inputSearch" class="form-control" placeholder="Search By Event Name"
+            [(ngModel)]="searchChars" (input)="searchEvents()">
+    </div>
+</div>
+<hr>
+ 
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            @for (col of columns; track $index) {
+            <th>{{col}}</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (event of filteredEvents | paginate :{itemsPerPage:pageSize,currentPage:pageNumber}; track $index) {
+        <tr>
+            <td>{{event.eventCode }} </td>
+            <td>{{event.eventName | uppercase}} </td>
+            <td>{{event.description}} </td>
+            <td>{{event.startDate.toString()| dateGlobalization :'MR-IN'}}</td>
+            <td>{{event.endDate.toString()| dateGlobalization :'MR-IN'}}</td>
+            <td>{{event.fees | currency:'INR'}}</td>
+            <td>
+                <!-- <button class="btn btn-primary" (click)="onEventSelecction(event.eventId)">
+                    Show Details
+                </button> -->
+                <a class="btn btn-dark" [routerLink]="['/events',event.eventId]">show details</a>
+            </td>
+            @if(role==='Hr'){
+            <td>
+                <!-- <button class="btn btn-primary" (click)="onEventSelecction(event.eventId)">
+                    Cancel Event
+                </button> -->
+                <a class="btn btn-dark" [routerLink]="['/events',event.eventId]">Cancel Event</a>
+            </td>
+        }
+        </tr>
+        }
+    </tbody>
+</table>
+<div class="container text-center my-pagination">
+    <pagination-controls (pageChange)="pageNumber=$event">
+ 
+    </pagination-controls>
+</div>
+ 
+<!-- @if (selectedEvent) {
+ 
+    <app-event-details [event]="selectedEvent" subTitle="Enjoy the Event!" (sendConfiramtionMessage)="handleChildMessage($event)"></app-event-details>
+} -->
+<!-- @if (selectedEventId>0) {
+ 
+ 
+<app-event-details [eventId]="selectedEventId" subTitle="Enjoy the Event!"
+    (sendConfiramtionMessage)="handleChildMessage($event)"></app-event-details>
+} -->
+}
+@else {
+<h4>
+    Sorry ! We did not find any Event ! please Try Again after sometime.
+</h4>
+}
+ 
+ 

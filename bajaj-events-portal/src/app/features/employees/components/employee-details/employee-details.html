@@ -1,0 +1,53 @@
+@if (employee){
+    <h1>{{title + employee.employeeName}}</h1>
+    <table class="table table-hover table-striped">
+        <tbody>
+            <tr>
+                <th>Employee Id</th>
+                <td><span>{{employee.employeeId}}</span></td>
+            </tr>
+            <tr>
+                <th>Employee Name</th>
+                <td><span>{{employee.employeeName}}</span></td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td><span>{{employee.address|titlecase}}</span></td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td><span>{{employee.city}}</span></td>
+            </tr>
+            <tr>
+                <th>Zipcode</th> 
+                <td><span>{{employee.zipcode}}</span></td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td><span>{{employee.phone}}</span></td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td><span>{{employee.email}}</span></td>
+            </tr>
+            <tr>
+                <th>Skill Sets</th>
+                <td><span>{{employee.skillSets}}</span></td>
+            </tr>
+            <tr>
+                <th>Country</th>
+                <td><span>{{employee.country}}</span></td>
+            </tr>
+            <tr>
+                <th>Joining Date</th>
+                <td><span>{{employee.joiningDate}}</span></td>
+            </tr>
+          
+        </tbody>
+    </table>
+    <button class="btn btn-info" 
+                (click)="onEmployeeProcessed()">Show Child Message
+    </button>
+}@else {
+    <h4>We did not find the employee which you are looking for!</h4>
+}

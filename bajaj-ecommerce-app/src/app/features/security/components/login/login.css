@@ -1,0 +1,75 @@
+/* Form validation styles */
+input.ng-invalid.ng-touched {
+    border-left: solid 5px #dc3545;
+    box-shadow: 0 0 0 0.1rem rgba(220, 53, 69, 0.25);
+}
+
+input.ng-valid.ng-touched {
+    border-left: solid 5px #198754;
+    box-shadow: 0 0 0 0.1rem rgba(25, 135, 84, 0.25);
+}
+
+/* Loading state for inputs */
+input:disabled {
+    background-color: #f8f9fa;
+    opacity: 0.7;
+}
+
+/* Button hover effects */
+.btn-primary:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,123,255,0.3);
+    transition: all 0.2s ease;
+}
+
+.btn-outline-danger:hover {
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+/* Card animation */
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Alert animations */
+.alert {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Spinner styling */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Success state styling */
+.alert-success {
+    border-left: 5px solid #198754;
+}
+
+.alert-danger {
+    border-left: 5px solid #dc3545;
+}

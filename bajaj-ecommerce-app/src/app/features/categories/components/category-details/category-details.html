@@ -1,0 +1,245 @@
+<!-- Categories Section -->
+<section class="categories-section container-fluid py-4">
+  <div class="container">
+    
+    <!-- Categories View (Default) -->
+    @if (!selectedCategory) {
+      <!-- Section Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="categories-heading text-center mb-3">Shop by Categories</h2>
+          <p class="text-center text-muted">Browse our wide range of product categories</p>
+        </div>
+      </div>
+      
+      <!-- Loading State -->
+      @if (categoriesLoading) {
+        <div class="row">
+          <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading categories...</span>
+            </div>
+            <p class="mt-3 text-muted">Loading categories...</p>
+          </div>
+        </div>
+      }
+      
+      <!-- Error State -->
+      @if (categoriesError && !categoriesLoading) {
+        <div class="row">
+          <div class="col-12">
+            <div class="alert alert-warning text-center" role="alert">
+              <h4 class="alert-heading">⚠️ {{ categoriesError }}</h4>
+              <button class="btn btn-primary" (click)="loadCategories()">Retry</button>
+            </div>
+          </div>
+        </div>
+      }
+      
+      <!-- Categories Grid -->
+      @if (!categoriesLoading && categories.length > 0) {
+        <div class="row g-4">
+          @for (category of categories; track category._id) {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <div class="card category-card h-100 shadow-sm" (click)="loadProductsByCategory(category)">
+                <img [src]="category.image" 
+                     class="card-img-top category-image" 
+                     [alt]="category.name"
+                     onerror="this.src='/images/camera.png'">
+                <div class="card-body text-center">
+                  <h5 class="card-title category-title">{{ category.name }}</h5>
+                  <small class="text-muted">{{ category.slug }}</small>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+    
+    <!-- Products View (When category is selected) -->
+    @if (selectedCategory) {
+      <!-- Back Button and Category Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <button class="btn btn-outline-secondary mb-3" (click)="backToCategories()">
+            <span aria-hidden="true">&larr;</span> Back to Categories
+          </button>
+          <h2 class="products-heading text-center mb-3">{{ selectedCategory.name }}</h2>
+          <p class="text-center text-muted">Products in {{ selectedCategory.name }} category</p>
+        </div>
+      </div>
+      
+      <!-- Products Loading State -->
+      @if (productsLoading) {
+        <div class="row">
+          <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading products...</span>
+            </div>
+            <p class="mt-3 text-muted">Loading products...</p>
+          </div>
+        </div>
+      }
+      
+      <!-- Products Error State -->
+      @if (productsError && !productsLoading) {
+        <div class="row">
+          <div class="col-12">
+            <div class="alert alert-warning text-center" role="alert">
+              <h4 class="alert-heading">⚠️ {{ productsError }}</h4>
+              <button class="btn btn-primary" (click)="loadProductsByCategory(selectedCategory)">Retry</button>
+            </div>
+          </div>
+        </div>
+      }
+      
+      <!-- Products Grid -->
+      @if (!productsLoading && currentProducts.length > 0) {
+        <div class="row g-4">
+          @if (filteredProducts().length === 0) {
+            <div class="col-12">
+              <div class="alert alert-info text-center" role="alert">
+                <strong>No products found</strong>
+                @if (currentProducts.length > 0) {
+                  <span class="d-block">Try refining your search.</span>
+                }
+              </div>
+            </div>
+          }
+          @for (product of filteredProducts(); track product._id) {
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="card product-card h-100 shadow-sm">
+                <img [src]="product.images[0]" 
+                     class="card-img-top product-image clickable" 
+                     [alt]="product.name"
+                     (click)="openProductDetails(product._id)"
+                     onerror="this.src='/images/camera.png'">
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title product-title clickable" 
+                      (click)="openProductDetails(product._id)">
+                    {{ product.name }}
+                  </h5>
+                  <p class="card-text product-description text-muted flex-grow-1">{{ product.description }}</p>
+                  
+                  <!-- Brand and Stock Info -->
+                  <div class="product-meta mb-2">
+                    <small class="text-muted">
+                      <strong>Brand:</strong> {{ product.brand }} | 
+                      <strong>Stock:</strong> {{ product.stock }} units
+                    </small>
+                  </div>
+                  
+                  <!-- Price Section -->
+                  <div class="product-price mb-2">
+                    <span class="price-current fw-bold fs-5 text-primary">₹{{ getDiscountedPrice(product) | number:'1.0-0' }}</span>
+                    @if (product.discount > 0) {
+                      <span class="price-original text-decoration-line-through text-muted ms-2">
+                        ₹{{ product.price | number:'1.0-0' }}
+                      </span>
+                      <span class="discount-badge badge bg-success ms-2">
+                        {{ product.discount }}% OFF
+                      </span>
+                    }
+                  </div>
+                  
+                  <!-- Rating Section -->
+                  <div class="product-rating mb-3">
+                    <div class="stars-container">
+                      @for (star of getStarsArray(product.rating); track $index) {
+                        <span class="star"
+                              [ngClass]="{
+                                'star-full': star.type === 'full',
+                                'star-half': star.type === 'half',
+                                'star-empty': star.type === 'empty'
+                              }">
+                          ★
+                        </span>
+                      }
+                    </div>
+                    <span class="rating-text text-muted">({{ product.rating | number:'1.0-1' }}) {{ product.numReviews }} reviews</span>
+                  </div>
+                  
+                  <!-- Featured Badge -->
+                  @if (product.isFeatured) {
+                    <div class="featured-badge mb-2">
+                      <span class="badge bg-warning text-dark">⭐ Featured</span>
+                    </div>
+                  }
+                  
+                  <button class="btn btn-primary mt-auto" [disabled]="product.stock === 0" (click)="addToCart(product)">
+                    {{ product.stock > 0 ? 'Add to Cart' : 'Out of Stock' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+        
+        <!-- Pagination -->
+        @if (totalPages > 1) {
+          <div class="row mt-5">
+            <div class="col-12">
+              <nav aria-label="Products pagination">
+                <ul class="pagination justify-content-center">
+                  <li class="page-item" [class.disabled]="isPrevDisabled">
+                    <a class="page-link" href="javascript:void(0)" (click)="changePage('prev')" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  @for (pageNum of pageNumbers; track pageNum) {
+                    <li class="page-item" [class.active]="isPageActive(pageNum)">
+                      <a class="page-link" href="javascript:void(0)" (click)="changePage(pageNum)">{{ pageNum }}</a>
+                    </li>
+                  }
+                  <li class="page-item" [class.disabled]="isNextDisabled">
+                    <a class="page-link" href="javascript:void(0)" (click)="changePage('next')" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        }
+        
+        <!-- Products Count Info -->
+        <div class="row mt-3">
+          <div class="col-12 text-center">
+            <small class="text-muted">
+              Showing {{ ((currentPage - 1) * productsPerPage) + 1 }} - 
+              {{ endProductIndex }} 
+              of {{ totalProductsCount }} products in {{ selectedCategory.name }}
+            </small>
+          </div>
+        </div>
+      }
+      
+      <!-- No Products Found -->
+      @if (!productsLoading && currentProducts.length === 0 && !productsError) {
+        <div class="row">
+          <div class="col-12 text-center py-5">
+            <div class="alert alert-info">
+              <h4>No Products Found</h4>
+              <p class="mb-0">No products are currently available in the {{ selectedCategory.name }} category.</p>
+            </div>
+          </div>
+        </div>
+      }
+    }
+    
+  </div>
+  <!-- Floating Checkout Button -->
+  <div class="position-fixed" style="bottom: 20px; right: 20px; z-index: 1050;">
+    <button class="btn btn-success shadow" *ngIf="cartService.totalCount() > 0" (click)="checkout()">
+      Checkout (₹{{ cartService.totalValue() | number:'1.0-0' }})
+    </button>
+  </div>
+</section>
+
+<!-- Product Details Modal -->
+<bajaj-product-details 
+  [productId]="selectedProductId"
+  [isVisible]="isModalVisible"
+  (closeModal)="closeProductDetails()">
+</bajaj-product-details>

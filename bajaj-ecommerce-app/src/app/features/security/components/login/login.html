@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg border-0 rounded-4 p-4" style="width: 380px;">
+        <div class="text-center mb-3">
+            <h4 class="fw-bold text-primary mb-2">Bajaj eCommerce Authentication</h4>
+            
+        </div>
+
+        @if (isLoggedIn()) {
+            <!-- Success State -->
+            <div class="text-center">
+                <button type="button" class="btn btn-outline-danger" (click)="logout()">
+                    🚪 Logout
+                </button>
+            </div>
+        } @else {
+            <!-- Login Form -->
+            <form (ngSubmit)="onCredentialsSubmit()">
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-semibold">Email address</label>
+                    <input type="email" id="email" name="email" #email="ngModel"
+                        class="form-control" required email placeholder="Enter your email" 
+                        [(ngModel)]="user.email" [disabled]="isLoading">
+                        @if(email.invalid && (email.dirty || email.touched)) {
+                            <div class="text-danger">Please enter a valid email address.</div>
+                        }
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3">
+                    <label for="password" class="form-label fw-semibold">Password</label>
+                    <input type="password" id="password" name="password" #password="ngModel" 
+                        class="form-control" required minlength="6"
+                        placeholder="Enter your password" [(ngModel)]="user.password" [disabled]="isLoading">
+                        @if(password.invalid && (password.dirty || password.touched)) {
+                            <div class="text-danger">Password must be at least 6 characters long.</div>
+                        }
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill" [disabled]="isLoading || email.invalid || password.invalid">
+                        @if (isLoading) {
+                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            Logging in...
+                        } @else {
+                            🔐 Login
+                        }
+                    </button>
+                </div>
+
+                <div class="text-center mt-3">
+                    <small class="text-muted">Forgot password?</small>
+                </div>
+            </form>
+        }
+
+        <!-- Error Message -->
+        @if (authErrorMessage) {
+            <div class="alert alert-danger mt-3" role="alert">
+                <strong>❌ Error:</strong> {{ authErrorMessage }}
+            </div>
+        }
+    </div>
+</div>

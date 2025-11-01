@@ -1,0 +1,60 @@
+/* Slider occupies top 25% of viewport */
+.slider-wrapper {
+  height: 25vh;
+  max-height: 25vh;
+  overflow: hidden;
+  background: #f8f9fa; /* subtle neutral backdrop for letterboxing */
+  position: relative; /* Keep Bootstrap carousel positioning intact */
+}
+
+/* Ensure inner carousel container fills height and maintains Bootstrap behavior */
+.slider-inner {
+  height: 100%;
+  position: relative; /* Required for Bootstrap carousel item positioning */
+}
+
+/* Each carousel item fills container and centers its image */
+.slider-item {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute; /* Bootstrap uses absolute positioning for slide transitions */
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+/* Only the active item should be visible */
+.slider-item:not(.active) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.slider-item.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* Images scale down to fit without cropping */
+.slider-image {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain; /* preserve entire image */
+  transition: opacity .3s ease;
+}
+
+.slider-image:not([src]) {
+  opacity: 0;
+}
+
+@media (min-width: 992px) {
+  .slider-wrapper { height: 25vh; }
+}
+
+@media (max-height: 500px) {
+  /* For very short viewports, allow a little more space to keep images legible */
+  .slider-wrapper { height: 30vh; }
+}

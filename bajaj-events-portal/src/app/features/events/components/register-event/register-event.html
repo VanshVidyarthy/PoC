@@ -1,0 +1,80 @@
+<div class="container">
+    <h1>{{title}}</h1>
+    <hr>
+    <form [formGroup]=register.eventForm #eventForms="ngForm" (ngSubmit)="onEventSubmit()">
+        <fieldset>
+            <div class="form-group">
+                <label for="inputEventId" class="form-label mt-4">Event Id</label>
+                <input type="number" class="form-control" id="inputEventId" placeholder="Please enter your event Id!"
+                    name="eventId" formControlName="eventId">
+                @if(register.eventForm.controls['eventId'].errors?.['required'])
+                {
+                    <p style="color:red;">*Required Field!</p>
+                }
+                @if(register.eventForm.controls['eventId'].errors?.['minlength']){
+                    <p style="color:red;">*Minimum length should be 3 characters!</p>
+                }
+                @if(register.eventForm.controls['eventId'].errors?.['maxlength']){
+                    <p style="color:red;">*Maximum length should be 50 characters!</p>
+                }
+            </div>
+            <div class="form-group">
+                <label for="inputEventCode" class="form-label mt-4">Event Code</label>
+                <input type="text" class="form-control" id="inputEventCode" placeholder="Please enter your event code!"
+                    name="eventCode" formControlName="eventCode">
+                @if(register.eventForm.controls['eventCode'].errors?.['required']){
+                    <p style="color:red;">*Required Field!</p>
+                }
+                @if(register.eventForm.controls['eventCode'].errors?.['minlength']){
+                    <p style="color:red;">*Minimum length should be 3 characters!</p>
+                }
+                @if(register.eventForm.controls['eventCode'].errors?.['maxlength']){
+                    <p style="color:red;">*Maximum length should be 50 characters!</p>
+                }
+            </div>
+            <div class="form-group">
+                <label for="inputEventName" class="form-label mt-4">Event Name</label>
+                <input type="text" class="form-control" id="inputEventName" placeholder="Please enter your event name!"
+                    name="eventName" formControlName="eventName">
+                @if(register.eventForm.controls['eventName'].errors?.['required']){
+                    <p style="color:red;">*Required Field!</p>
+                }
+                @if(register.eventForm.controls['eventName'].errors?.['minlength(3)']){
+                    <p style="color:red;">*Minimum length should be 3 characters!</p>
+                }
+                @if(register.eventForm.controls['eventName'].errors?.['maxlength']){
+                    <p style="color:red;">*Maximum length should be 50 characters!</p>
+                }
+            
+            </div>
+            <div class="form-group">
+                <label for="inputDescription" class="form-label mt-4">Description</label>
+                <input type="text" class="form-control" id="inputDescription"
+                    placeholder="Please enter your event description!" name="description" formControlName="description">
+            </div>
+            <div class="form-group">
+                <label for="inputStartDate" class="form-label mt-4">Start Date</label>
+                <input type="date" class="form-control" id="inputStartDate"
+                    placeholder="Please enter/select your event start date!" name="startDate"
+                    formControlName="startDate">
+            </div>
+            <div class="form-group">
+                <label for="inputEndDate" class="form-label mt-4">End Date</label>
+                <input type="date" class="form-control" id="inputEndDate"
+                    placeholder="Please enter/select your event end date!" name="endDate" formControlName="endDate">
+            </div>
+            <div class="form-group">
+                <label for="inputFees" class="form-label mt-4">Event Fees</label>
+                <input type="number" class="form-control" id="inputFees" placeholder="Please enter your event fees!"
+                    name="fees" formControlName="fees">
+            </div>
+            <div class="form-group">
+                <label for="inputSeatsFilled" class="form-label mt-4">Total Seats Filled</label>
+                <input type="number" class="form-control" id="inputSeatsFilled"
+                    placeholder="Please enter your total registrations!" name="seatsFilled"
+                    formControlName="seatsFilled">
+            </div>
+            <button type="submit" class="btn btn-dark" [disabled]="!eventForms.valid" >Register Event</button>
+        </fieldset>
+    </form>
+</div>

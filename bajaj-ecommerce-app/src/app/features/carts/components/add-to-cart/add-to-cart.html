@@ -1,0 +1,70 @@
+<section class="cart-section container py-4">
+	<div class="row mb-4">
+		<div class="col-12 text-center">
+			<h2 class="mb-2">Your Cart</h2>
+			<p class="text-muted" *ngIf="totalCount() === 0">Your cart is empty. Browse products and add items to begin checkout.</p>
+			<p class="text-muted" *ngIf="totalCount() > 0">You have {{ totalCount() }} item(s) in your cart.</p>
+		</div>
+	</div>
+
+	<div class="row" *ngIf="totalCount() > 0">
+		<div class="col-12 col-lg-8">
+			<table class="table align-middle">
+				<thead class="table-light">
+					<tr>
+						<th>Product</th>
+						<th class="text-center" style="width:120px;">Qty</th>
+						<th class="text-end" style="width:140px;">Price</th>
+						<th class="text-end" style="width:140px;">Subtotal</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let item of items(); trackBy: trackByProductId">
+						<td>
+							<div class="d-flex align-items-center">
+								<img [src]="item.product.images[0]" onerror="this.src='/images/no-image.png'" alt="{{ item.product.name }}" style="width:60px;height:60px;object-fit:cover;border-radius:4px;" class="me-3">
+								<div>
+									<strong>{{ item.product.name }}</strong><br>
+									<small class="text-muted">SKU: {{ item.product.sku }}</small>
+								</div>
+							</div>
+						</td>
+						<td class="text-center">
+							<input type="number" min="1" class="form-control form-control-sm text-center" [value]="item.quantity" (change)="updateQuantity(item.product._id, $event)">
+						</td>
+						<td class="text-end">
+							<div>
+								<span class="fw-semibold">
+									₹{{ getDiscountedPrice(item.product) | number:'1.0-0' }}
+								</span>
+								<div *ngIf="item.product.discount > 0">
+									<small class="text-muted text-decoration-line-through">₹{{ item.product.price | number:'1.0-0' }}</small>
+									<span class="badge bg-success ms-1">{{ item.product.discount }}% OFF</span>
+								</div>
+							</div>
+						</td>
+						<td class="text-end">₹{{ (getDiscountedPrice(item.product) * item.quantity) | number:'1.0-0' }}</td>
+						<td class="text-end">
+							<button class="btn btn-sm btn-outline-danger" (click)="remove(item.product._id)">Remove</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="d-flex justify-content-between">
+				<button class="btn btn-outline-secondary" (click)="clear()">Clear Cart</button>
+				<button class="btn btn-primary" (click)="checkout()">Checkout</button>
+			</div>
+		</div>
+		<div class="col-12 col-lg-4 mt-4 mt-lg-0">
+			<div class="card shadow-sm">
+				<div class="card-body">
+					<h5 class="card-title">Order Summary</h5>
+					<p class="mb-1">Items: <strong>{{ totalCount() }}</strong></p>
+					<p class="mb-3">Total: <strong class="fs-5">₹{{ totalValue() | number:'1.0-0' }}</strong></p>
+					<button class="btn btn-success w-100" (click)="checkout()">Proceed to Paytm</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,216 @@
+<!-- Product Details Modal -->
+@if (isVisible) {
+  <div class="modal-backdrop" 
+       (click)="onBackdropClick($event)">
+    
+    <div class="modal-container" 
+         (click)="onModalContentClick($event)">
+    
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">Product Details</h2>
+      <button type="button" 
+              class="btn-close" 
+              (click)="onCloseModal()"
+              aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      
+      <!-- Loading State -->
+      @if (loading) {
+        <div class="loading-container">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading product details...</span>
+          </div>
+          <p class="mt-3 text-muted">Loading product details...</p>
+        </div>
+      }
+      
+      <!-- Error State -->
+      @if (error && !loading) {
+        <div class="error-container">
+          <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">⚠️ Error</h4>
+            <p>{{ error }}</p>
+            <button class="btn btn-primary" (click)="loadProductDetails()">Retry</button>
+          </div>
+        </div>
+      }
+      
+      <!-- Product Details Content -->
+      @if (!loading) {
+        <div class="product-details-content">
+        
+        <!-- Product Images and Basic Info -->
+        <div class="row">
+          
+          <!-- Image Gallery -->
+          <div class="col-md-6">
+            <div class="image-gallery">
+              <!-- Main Image -->
+              <div class="main-image-container">
+                <img [src]="safeImages[currentImageIndex]" 
+                     [alt]="safeProduct.name"
+                     class="main-image"
+                     onerror="this.src='/images/camera.png'">
+              </div>
+              
+              <!-- Thumbnail Images -->
+              @if (safeImages.length > 1) {
+                <div class="thumbnail-container">
+                  <div class="thumbnail-scroll">
+                    @for (image of safeImages; track $index) {
+                      <img [src]="image"
+                           [alt]="safeProduct.name + ' - Image ' + ($index + 1)"
+                           class="thumbnail-image"
+                           [class.active]="$index === currentImageIndex"
+                           (click)="changeImage($index)"
+                           onerror="this.src='/images/camera.png'">
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+          
+          <!-- Product Information -->
+          <div class="col-md-6">
+            <div class="product-info">
+              
+              <!-- Product Name -->
+              <h1 class="product-name">{{ safeProduct.name }}</h1>
+              
+              <!-- Brand and SKU -->
+              <div class="product-meta mb-3">
+                <span class="badge bg-secondary me-2">{{ safeProduct.brand }}</span>
+                <small class="text-muted">SKU: {{ safeProduct.sku }}</small>
+              </div>
+              
+              <!-- Rating and Reviews -->
+              <div class="rating-section mb-3">
+                <div class="stars-container">
+                  @for (star of getStarsArray(safeProduct.rating); track $index) {
+                    <span class="star"
+                          [ngClass]="{
+                            'star-full': star.type === 'full',
+                            'star-half': star.type === 'half',
+                            'star-empty': star.type === 'empty'
+                          }">
+                      ★
+                    </span>
+                  }
+                </div>
+                <span class="rating-text">
+                  {{ safeProduct.rating | number:'1.0-1' }} 
+                  ({{ safeProduct.numReviews }} {{ safeProduct.numReviews === 1 ? 'review' : 'reviews' }})
+                </span>
+              </div>
+              
+              <!-- Price Section -->
+              <div class="price-section mb-4">
+                <div class="current-price">
+                  ₹{{ getDiscountedPrice(safeProduct) | number:'1.0-0' }}
+                </div>
+                @if (safeProduct.discount > 0) {
+                  <div class="original-price">
+                    <del>₹{{ safeProduct.price | number:'1.0-0' }}</del>
+                    <span class="discount-badge">{{ safeProduct.discount }}% OFF</span>
+                  </div>
+                  <div class="savings">
+                    You save: ₹{{ getSavings(safeProduct) | number:'1.0-0' }}
+                  </div>
+                }
+              </div>
+              
+              <!-- Stock Status -->
+              <div class="stock-section mb-3">
+                <span class="stock-status" 
+                      [class.in-stock]="safeProduct.stock > 0"
+                      [class.out-of-stock]="safeProduct.stock === 0">
+                  @if (safeProduct.stock > 0) {
+                    <span class="text-success">
+                      ✓ In Stock ({{ safeProduct.stock }} available)
+                    </span>
+                  } @else {
+                    <span class="text-danger">
+                      ✗ Out of Stock
+                    </span>
+                  }
+                </span>
+              </div>
+              
+              <!-- Category and Featured Badge -->
+              <div class="category-section mb-3">
+                <span class="badge bg-primary me-2">{{ getCategoryName(safeProduct.categoryId) }}</span>
+                @if (safeProduct.isFeatured) {
+                  <span class="badge bg-warning">Featured Product</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Description -->
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="description-section">
+              <h3>Description</h3>
+              <p class="product-description">{{ safeProduct.description }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Attributes -->
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="attributes-section">
+              <h3>Product Specifications</h3>
+              <div class="row">
+                <div class="col-sm-6 col-lg-4 mb-3">
+                  <div class="attribute-item">
+                    <strong>Color:</strong>
+                    <span class="attribute-value">{{ safeProduct.attributes.color }}</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-4 mb-3">
+                  <div class="attribute-item">
+                    <strong>Material:</strong>
+                    <span class="attribute-value">{{ safeProduct.attributes.material }}</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-4 mb-3">
+                  <div class="attribute-item">
+                    <strong>Warranty:</strong>
+                    <span class="attribute-value">{{ safeProduct.attributes.warranty }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      }
+    </div> 
+    
+    <!-- Modal Footer -->
+    @if (!loading) {
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onCloseModal()">Close</button>
+        <button type="button" class="btn btn-primary" [disabled]="safeProduct.stock === 0" (click)="addToCart()">
+          @if (safeProduct.stock > 0) { <span>Add to Cart</span> } @else { <span>Out of Stock</span> }
+        </button>
+        <button type="button" class="btn btn-success" *ngIf="cartService.totalCount() > 0" (click)="checkout()">
+          Checkout (₹{{ cartService.totalValue() | number:'1.0-0' }})
+        </button>
+      </div>
+    }
+    
+  </div>
+  <!-- Close modal-backdrop -->
+  </div>
+}
+

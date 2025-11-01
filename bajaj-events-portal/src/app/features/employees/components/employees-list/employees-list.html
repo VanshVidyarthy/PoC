@@ -1,0 +1,62 @@
+@if (employees && employees.length > 0) {
+<h1>{{title}}</h1>
+    <hr>
+    <h2>{{subtitle}}</h2>
+    @if (childMessage) {
+        <p>{{childMessage}}</p>
+    }
+    <div class="row text-center mb-3">
+  <div class="container row">
+    <input type="search" class="text-center" aria-describedby="searchHelpInline" placeholder="Search for Employees here Employee Name!" [(ngModel)]="searchChars" (input)="searchEmployees()">
+</div>
+</div>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            @for (col of columns; track $index) {
+                <th>{{col}}</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (employee of filteredEmployees|paginate: { itemsPerPage: pageSize, currentPage: pageNumber}; track $index) {
+            <tr>
+                <td><span>{{employee.employeeId}}</span></td>
+                <td><span>{{employee.employeeName}}</span></td>
+                <td><span>{{employee.address}}</span></td>
+                <td><span>{{employee.city}}</span></td>
+                <td><span>{{employee.zipcode}}</span></td>
+                <td><span>{{employee.phone}}</span></td>
+                <td><span>{{employee.email}}</span></td>
+                <td><span>{{employee.skillSets}}</span></td>
+                <td><span>{{employee.country}}</span></td>
+                <td><span>{{employee.joiningDate}}</span></td>
+                <td>
+                    <!-- <button class="btn btn-info" 
+                        (click)="onEmployeeSelection(employee.employeeId)">Show Details
+                    </button> -->
+                    <a class="class-btn btn-dark" [routerLink]="['/employees', employee.employeeId]">Show Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="container text-center">
+    <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+</div>
+<!-- @if(selectedEmployeeId > 0){
+    @defer () {
+        <app-employee-details [employeeId]="selectedEmployeeId" [subTitle]="childSubtitle" (sendConfirmationMessage)="handleChildMessage($event)">
+        </app-employee-details>
+}
+    @placeholder(minimum 3000ms) {
+        <h4>Please wait while your contents are getting loaded.</h4>
+    }
+    @error {
+        <h4>Something went wrong</h4>
+    }
+    } -->
+} 
+@else {
+    <h3>No employees available</h3>
+}

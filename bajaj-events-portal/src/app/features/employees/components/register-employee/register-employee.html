@@ -1,0 +1,217 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">{{title}}</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="employeeForm" (ngSubmit)="onEmployeeSubmit()">
+            
+            <!-- Employee ID -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="employeeId" class="form-label fw-semibold">Employee ID *</label>
+                <input type="number" id="employeeId" formControlName="employeeId" 
+                       class="form-control" 
+                       [class.is-invalid]="employeeForm.get('employeeId')?.invalid && employeeForm.get('employeeId')?.touched">
+                @if (employeeForm.get('employeeId')?.invalid && employeeForm.get('employeeId')?.touched) {
+                  <div class="invalid-feedback">
+                    @if (employeeForm.get('employeeId')?.errors?.['required']) {
+                      Employee ID is required.
+                    }
+                    @if (employeeForm.get('employeeId')?.errors?.['min']) {
+                      Employee ID must be greater than 0.
+                    }
+                  </div>
+                }
+              </div>
+
+              <!-- Employee Name -->
+              <div class="col-md-6">
+                <label for="employeeName" class="form-label fw-semibold">Employee Name *</label>
+                <input type="text" id="employeeName" formControlName="employeeName" 
+                       class="form-control" 
+                       [class.is-invalid]="employeeForm.get('employeeName')?.invalid && employeeForm.get('employeeName')?.touched">
+                @if (employeeForm.get('employeeName')?.invalid && employeeForm.get('employeeName')?.touched) {
+                  <div class="invalid-feedback">
+                    @if (employeeForm.get('employeeName')?.errors?.['required']) {
+                      Employee name is required.
+                    }
+                    @if (employeeForm.get('employeeName')?.errors?.['minlength']) {
+                      Name must be at least 2 characters long.
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+              <label for="address" class="form-label fw-semibold">Address * (minimum 25 characters)</label>
+              <textarea id="address" formControlName="address" rows="3"
+                        class="form-control" 
+                        [class.is-invalid]="employeeForm.get('address')?.invalid && employeeForm.get('address')?.touched"></textarea>
+              @if (employeeForm.get('address')?.invalid && employeeForm.get('address')?.touched) {
+                <div class="invalid-feedback">
+                  @if (employeeForm.get('address')?.errors?.['required']) {
+                    Address is required.
+                  }
+                  @if (employeeForm.get('address')?.errors?.['addressMinLength']) {
+                    Address must be at least 25 characters long. Current length: {{employeeForm.get('address')?.errors?.['addressMinLength'].actualLength}}.
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- City and Zipcode -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="city" class="form-label fw-semibold">City *</label>
+                <input type="text" id="city" formControlName="city" 
+                       class="form-control" 
+                       [class.is-invalid]="employeeForm.get('city')?.invalid && employeeForm.get('city')?.touched">
+                @if (employeeForm.get('city')?.invalid && employeeForm.get('city')?.touched) {
+                  <div class="invalid-feedback">
+                    City is required.
+                  </div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label for="zipcode" class="form-label fw-semibold">Zipcode * (exactly 6 characters)</label>
+                <input type="text" id="zipcode" formControlName="zipcode" 
+                       class="form-control" 
+                       [class.is-invalid]="employeeForm.get('zipcode')?.invalid && employeeForm.get('zipcode')?.touched">
+                @if (employeeForm.get('zipcode')?.invalid && employeeForm.get('zipcode')?.touched) {
+                  <div class="invalid-feedback">
+                    @if (employeeForm.get('zipcode')?.errors?.['required']) {
+                      Zipcode is required.
+                    }
+                    @if (employeeForm.get('zipcode')?.errors?.['zipcodeExactLength']) {
+                      Zipcode must be exactly 6 characters. Current length: {{employeeForm.get('zipcode')?.errors?.['zipcodeExactLength'].actualLength}}.
+                    }
+                    @if (employeeForm.get('zipcode')?.errors?.['pattern']) {
+                      Zipcode must be 6 digits.
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Phone and Email -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="phone" class="form-label fw-semibold">Phone *</label>
+                <input type="tel" id="phone" formControlName="phone" 
+                       class="form-control" 
+                       [class.is-invalid]="employeeForm.get('phone')?.invalid && employeeForm.get('phone')?.touched">
+                @if (employeeForm.get('phone')?.invalid && employeeForm.get('phone')?.touched) {
+                  <div class="invalid-feedback">
+                    @if (employeeForm.get('phone')?.errors?.['required']) {
+                      Phone number is required.
+                    }
+                    @if (employeeForm.get('phone')?.errors?.['pattern']) {
+                      Phone number must be 10 digits.
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label for="email" class="form-label fw-semibold">Email * (@domain.extension format)</label>
+                <input type="email" id="email" formControlName="email" 
+                       class="form-control" 
+                       [class.is-invalid]="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched">
+                @if (employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched) {
+                  <div class="invalid-feedback">
+                    @if (employeeForm.get('email')?.errors?.['required']) {
+                      Email is required.
+                    }
+                    @if (employeeForm.get('email')?.errors?.['domainEmail']) {
+                      {{employeeForm.get('email')?.errors?.['domainEmail'].message}}
+                    }
+                    @if (employeeForm.get('email')?.errors?.['email']) {
+                      Please enter a valid email address.
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Skill Sets and Country -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="skillSets" class="form-label fw-semibold">Skill Sets * (minimum 2, comma separated)</label>
+                <input type="text" id="skillSets" formControlName="skillSets" 
+                       class="form-control" placeholder="e.g., Java, Angular, Spring Boot"
+                       [class.is-invalid]="employeeForm.get('skillSets')?.invalid && employeeForm.get('skillSets')?.touched">
+                @if (employeeForm.get('skillSets')?.invalid && employeeForm.get('skillSets')?.touched) {
+                  <div class="invalid-feedback">
+                    @if (employeeForm.get('skillSets')?.errors?.['required']) {
+                      Skill sets are required.
+                    }
+                    @if (employeeForm.get('skillSets')?.errors?.['minimumSkillSets']) {
+                      Please enter at least 2 skill sets separated by commas. Current skills: {{employeeForm.get('skillSets')?.errors?.['minimumSkillSets'].actualSkills}}.
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label for="country" class="form-label fw-semibold">Country *</label>
+                <select id="country" formControlName="country" 
+                        class="form-select" 
+                        [class.is-invalid]="employeeForm.get('country')?.invalid && employeeForm.get('country')?.touched">
+                  <option value="">Select Country</option>
+                  <option value="India">India</option>
+                  <option value="USA">USA</option>
+                  <option value="UK">UK</option>
+                  <option value="Canada">Canada</option>
+                  <option value="Australia">Australia</option>
+                </select>
+                @if (employeeForm.get('country')?.invalid && employeeForm.get('country')?.touched) {
+                  <div class="invalid-feedback">
+                    Country is required.
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Joining Date and Avatar -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="joiningDate" class="form-label fw-semibold">Joining Date *</label>
+                <input type="date" id="joiningDate" formControlName="joiningDate" 
+                       class="form-control" 
+                       [class.is-invalid]="employeeForm.get('joiningDate')?.invalid && employeeForm.get('joiningDate')?.touched">
+                @if (employeeForm.get('joiningDate')?.invalid && employeeForm.get('joiningDate')?.touched) {
+                  <div class="invalid-feedback">
+                    Joining date is required.
+                  </div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label for="avatar" class="form-label fw-semibold">Avatar URL</label>
+                <input type="url" id="avatar" formControlName="avatar" 
+                       class="form-control" placeholder="https://example.com/avatar.jpg">
+              </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+              <button type="button" class="btn btn-secondary me-md-2" routerLink="/employees">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary" 
+                      [disabled]="employeeForm.invalid">
+                Register Employee
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

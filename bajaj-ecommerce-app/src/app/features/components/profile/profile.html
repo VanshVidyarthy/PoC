@@ -1,0 +1,33 @@
+<div class="container py-4">
+	<h3 class="mb-3">User Profile</h3>
+	@if (!user.email) {
+		<div class="alert alert-warning">No user is currently logged in.</div>
+	} @else {
+		<div class="card shadow-sm">
+			<div class="card-body">
+				<div class="row mb-2">
+					<div class="col-4 fw-semibold">Name:</div>
+					<div class="col-8">{{ user.name || '—' }}</div>
+				</div>
+				<div class="row mb-2">
+					<div class="col-4 fw-semibold">Email:</div>
+					<div class="col-8">{{ user.email }}</div>
+				</div>
+				<div class="row mb-2">
+					<div class="col-4 fw-semibold">Phone:</div>
+					<div class="col-8">{{ user.phone || '—' }}</div>
+				</div>
+				<div class="row mb-2">
+					<div class="col-4 fw-semibold">Role:</div>
+					<div class="col-8">{{ user.role || '—' }}</div>
+				</div>
+				<button class="btn btn-outline-primary btn-sm" (click)="refreshProfile()" [disabled]="loading">
+					@if (loading) { <span class="spinner-border spinner-border-sm"></span> Loading... } @else { Refresh }
+				</button>
+				@if (error) {
+					<div class="alert alert-danger mt-3">{{ error }}</div>
+				}
+			</div>
+		</div>
+	}
+</div>

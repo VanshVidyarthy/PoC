@@ -1,0 +1,60 @@
+@if (event) {
+  <h1>{{title + event.eventName}}</h1>
+  
+    <!-- <h1>{{subTitle}}</h1> -->
+ 
+    <table class="table table-hover table-striped">
+        <tbody>
+            <tr>
+                <th>Event Id</th>
+                <td><span>{{event.eventId}}</span></td>
+            </tr>
+            
+            <tr>
+                <th>Event Code</th>
+                <td><span>{{event.eventCode | lowercase}}</span></td>
+            </tr>
+            <tr>
+                <th>Event Name</th>
+                <td><span>{{event.eventName | uppercase}}</span></td>
+            </tr>
+            <tr>
+                <th>Event Describtion</th>
+                <td><span>{{event.description |titlecase}}</span></td>
+            </tr>
+            <tr>
+                <th>Event start Date</th>
+                <td><span>{{event.startDate | date:'dd-mm-yyyy'}}</span></td>
+            </tr>
+            <tr>
+                <th>Event End Date</th>
+                <td><span>{{event.endDate | date:"small"}}</span></td>
+            </tr>
+            <tr>
+                <th>Event Fees</th>
+                <td><span>{{event.fees|currency:'INR'}}</span></td>
+            </tr>
+            <tr>
+                <th>Event Total Registration</th>
+                <td><span>{{event.seatsFilled}}</span></td>
+            </tr>
+            <tr>
+                <th>Event Logo</th>
+                <!-- <td><span>{{event.logo}}</span></td> -->
+                 <td>
+                    <img [src]="event.logo" [alt]="event.eventName" >
+                </td>
+ 
+            </tr>
+        </tbody>
+    </table>
+    <hr>
+    <!-- <button class="btn btn-primary" (click)="onEventProcess()">
+        send Message to parent
+    </button> -->
+}@else {
+   <h4>
+    We did not find the event you are looking for!
+   </h4>
+}
+ 

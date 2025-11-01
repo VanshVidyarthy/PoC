@@ -1,0 +1,80 @@
+<!-- Sidebar Component -->
+<bajaj-side-nav-bar (navigate)="onNavigate($event)" [currentView]="currentView()"></bajaj-side-nav-bar>
+
+<!-- Main Content Area -->
+<div class="main-content">
+  <!-- Header -->
+  <header class="app-header d-flex flex-wrap align-items-center justify-content-between gap-3">
+    <h1 class="m-0">Welcome to Bajaj E-commerce App</h1>
+    <!-- Global Search Bar -->
+    <div class="search-bar ms-auto" style="min-width:260px; max-width:420px; flex:1;">
+      <div class="input-group">
+   <input #globalSearch type="text"
+     class="form-control"
+     placeholder="Search products..."
+     [value]="currentSearchQuery()"
+     (input)="onSearchInput(globalSearch.value)">
+        @if (currentSearchQuery()) {
+          <button class="btn btn-outline-secondary" type="button" (click)="clearSearch()" title="Clear search">&times;</button>
+        }
+        @if (!currentSearchQuery()) {
+          <span class="input-group-text bg-light text-muted">🔍</span>
+        }
+      </div>
+      @if (currentSearchQuery()) {
+        <small class="text-muted ms-1">Filtering by: <strong>{{ currentSearchQuery() }}</strong></small>
+      }
+    </div>
+    <hr class="w-100 mt-3">
+  </header>
+  
+  <!-- Home View (Default) -->
+  @if (currentView() === 'home') {
+    <!-- Slider Section -->
+    <section class="slider-section">
+      <bajaj-slider></bajaj-slider>
+    </section>
+    
+    <!-- Promotional Banner Section -->
+    <section class="banner-section mt-3 mb-4">
+      <bajaj-banner></bajaj-banner>
+    </section>
+    
+    <!-- Products Listing (single instance) -->
+    <main class="content-area">
+      <!-- Global search (header) filters this list via SearchService -->
+      <!-- <bajaj-products-list></bajaj-products-list> -->
+    </main>
+  }
+  
+  <!-- Categories View -->
+  @if (currentView() === 'categories') {
+    <main class="content-area">
+      <bajaj-category-details [resetTrigger]="categoriesResetTrigger()"></bajaj-category-details>
+    </main>
+  }
+  
+  <!-- Login View -->
+  @if (currentView() === 'login') {
+    <main class="content-area">
+      <bajaj-login></bajaj-login>
+    </main>
+  }
+
+  <!-- Signup View (only when logged out) -->
+  @if (currentView() === 'signup' && !isLoggedIn()) {
+    <main class="content-area">
+      <bajaj-register-user></bajaj-register-user>
+    </main>
+  }
+  
+  <!-- Cart View -->
+  @if (currentView() === 'cart') {
+    <main class="content-area">
+      <bajaj-add-to-cart></bajaj-add-to-cart>
+    </main>
+  }
+  
+  <!-- Footer -->
+  <bajaj-footer></bajaj-footer>
+</div>

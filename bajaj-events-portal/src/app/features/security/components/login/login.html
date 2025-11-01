@@ -1,0 +1,45 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg border-0 rounded-4 p-4" style="width: 380px;">
+        <div class="text-center mb-3">
+            <h4 class="fw-bold text-primary mb-2">Bajaj eCommerce Authentication</h4>
+            <p class="text-muted">Login to your account</p>
+        </div>
+
+        <form (ngSubmit)="onCredentialsSubmit()">
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="email" class="form-label fw-semibold" >Email address</label>
+                <input type="email" id="email" name="email" #email="ngModel"
+                    class="form-control" required email placeholder="Enter your email" [(ngModel)]="user.email">
+                    @if(email.invalid && (email.dirty || email.touched)) {
+                        <div class="text-danger">Please enter a valid email address.</div>
+                    }
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label for="password" class="form-label fw-semibold" novalidate>Password</label>
+                <input type="password" id="password" name="password" #password="ngModel" class="form-control" required minlength="6"
+                    placeholder="Enter your password" [(ngModel)]="user.password">
+                    @if(password.invalid && (password.dirty || password.touched)) {
+                        <div class="text-danger">Password must be at least 6 characters long.</div>
+                    }
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill">
+                    Login
+                </button>
+            </div>
+
+            <div class="text-center mt-3">
+                <small class="text-muted">Forgot password?</small>
+            </div>
+        </form>
+    </div>
+</div>
+@if (authErrorMessage!=='') {
+    <div class="alert alert-message">{{ authErrorMessage }}</div>
+}
